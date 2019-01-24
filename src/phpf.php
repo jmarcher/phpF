@@ -1410,7 +1410,7 @@ namespace {
 
 	}
 
-	define( 'VERSION', '19.7.5' );
+	define( 'VERSION', '20' );
 
 	function extractFromArgv( $argv, $item ) {
 		return array_values(
@@ -6689,7 +6689,7 @@ EOT;
 					if ( LeftAlignComment::NON_INDENTABLE_COMMENT == $text ) {
 						$touchedNonAlignableComment = true;
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 
 					$prefix = '';
@@ -7610,7 +7610,7 @@ EOT;
 				case T_WHITESPACE:
 					if (  ! $this->hasLn( $text ) ) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 					if ( $touchedSingleColon && $ternary ) {
 						$touchedSingleColon = false;
@@ -7727,7 +7727,7 @@ EOT;
 						] )
 					) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 					if (
 						$this->rightUsefulTokenIs( [
@@ -7767,7 +7767,7 @@ EOT;
 						] )
 					) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 
 					if (
@@ -7775,7 +7775,7 @@ EOT;
 						ST_PARENTHESES_OPEN != $lastParen
 					) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 
 					if (
@@ -7787,12 +7787,12 @@ EOT;
 						)
 					) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 
 					if ( 0 != $ternary ) {
 						$this->appendCode( $text );
-						continue;
+						continue 2;
 					}
 
 					$this->appendCode( ST_SEMI_COLON . $text );
@@ -8527,7 +8527,7 @@ EOT;
 						}
 						$this->appendCode( $this->getCrlf() . ST_CURLY_CLOSE . $this->getCrlf() );
 						prev( $this->tkns );
-						continue;
+						continue 2;
 					}
 					break;
 				default:
@@ -9920,10 +9920,10 @@ EOT;
 				case T_FUNCTION:
 					$this->appendCode( $text );
 					if (  ! $this->rightUsefulTokenIs( T_STRING ) ) {
-						continue;
+						continue 2;
 					}
 					if (  ! $this->leftTokenIs( T_DOC_COMMENT ) ) {
-						continue;
+						continue 2;
 					}
 
 					$foundParams      = [];
@@ -11150,7 +11150,7 @@ EOT;
 					$lastTouchedToken = $id;
 				case T_NS_SEPARATOR:
 					if ( T_NAMESPACE == $lastTouchedToken && $this->leftTokenIs( [T_USE] ) ) {
-						continue;
+						continue 2;
 					}
 				default:
 					$this->appendCode( $text );
@@ -12422,7 +12422,7 @@ EOT;
 					if ( $this->hasLnAfter() ) {
 						each( $this->tkns );
 						$this->appendCode( $this->newLine );
-						continue;
+						continue 2;
 					}
 
 					break;
@@ -12442,7 +12442,7 @@ EOT;
 						if ( $this->hasLnAfter() ) {
 							each( $this->tkns );
 							$this->appendCode( $this->newLine );
-							continue;
+							continue 2;
 						}
 					}
 
@@ -12466,7 +12466,7 @@ EOT;
 				case ST_CURLY_CLOSE:
 					if ( $this->hasLnBefore() ) {
 						$this->rtrimAndAppendCode( $this->newLine . $text );
-						continue;
+						continue 2;
 					}
 
 					$this->appendCode( $text );
@@ -12984,7 +12984,7 @@ EOT;
 					list( $leftId )       = $tkns[$left];
 					list( $rightId )      = $tkns[$right];
 					if ( $leftId == $rightId ) {
-						continue;
+						continue 2;
 					}
 
 					$leftPureVariable = $this->isPureVariable( $leftId );
